@@ -1,0 +1,60 @@
+
+
+\sloppy
+
+
+\title{\healpix C Subroutines Overview}
+\docid{npix2nside} \section[npix2nside]{ }
+\label{csub:npix2nside}
+\docrv{Version 1.0}
+\author{E. Hivon}
+\abstract{This document describes the \healpix C subroutine NPIX2NSIDE.}
+
+\begin{facility}
+{Function to provide the resolution parameter $\nside$ corresponding to the number of pixels $\npix$ over the full sky. 
+}
+{src/C/subs/chealpix.c}
+\end{facility}
+
+\begin{Cfunction}
+{long npix2nside(const long npix)}
+\end{Cfunction}
+
+\begin{arguments}
+{
+\begin{tabular}{p{0.3\hsize} p{0.05\hsize} p{0.1\hsize} p{0.45\hsize}} \hline  
+\textbf{name\&dimensionality} & \textbf{kind} & \textbf{in/out} & \textbf{description} \\ \hline
+                   &   &   &                           \\ %%% for presentation
+npix & long & IN & the number of pixels $\npix$ of the map . \\
+\thedocid  & long & OUT & returns the $\nside$ parameter of the map such that $\npix=12\nside^2$.\\
+\end{tabular}
+}
+\end{arguments}
+
+\begin{example}
+{
+nside= npix2nside(786432);  \\
+}
+{
+Returns the resolution parameter (256) corresponding to 786432 \healpix pixels.
+}
+\end{example}
+% \begin{related}
+%   \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+%   \item[\htmlref{npix2nside}{sub:npix2nside}] returns resolution parameter corresponding to the number of pixels.
+% %   \item[pix2xxx] conversion between pixel index and position on the sky.
+%   \end{sulist}
+% \end{related}
+
+\begin{related}
+  \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+  \item[\htmlref{ang2vec}{csub:ang2vec}] converts $(\theta,\phi)$ spherical coordinates into $(x,y,z)$ cartesian coordinates.
+  \item[\htmlref{vec2ang}{csub:vec2ang}] converts $(x,y,z)$ cartesian coordinates into $(\theta,\phi)$ spherical coordinates.
+  \item[\htmlref{nside2npix}{csub:nside2npix}] converts number of full sky pixels $\npix$ into resolution parameter $\nside$
+%  \item[\htmlref{npix2nside}{csub:npix2nside}] converts $\nside$ into number of
+%full sky pixels $\npix$.
+  \end{sulist}
+\end{related}
+
+\rule{\hsize}{2mm}
+

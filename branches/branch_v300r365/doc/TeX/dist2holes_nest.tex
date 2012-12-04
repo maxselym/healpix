@@ -1,0 +1,66 @@
+\sloppy
+\docid{dist2holes\_nest}\section[dist2holes\_nest]{ }
+\label{sub:dist2holes_nest}
+\docrv{Version 1.0}
+\author{Eric Hivon}
+\abstract{This document describes the \healpix Fortran90 subroutine DIST2HOLES\_NEST.}
+
+\begin{facility}
+{For a input binary mask in NESTED ordering, \thedocid\ returns the angular distance (in
+radians) from each {\em valid} (1-valued) pixel to the closest {\em invalid} (0-valued)
+pixel. Distances are measured between pixel centers.}
+{\modMaskTools}
+\end{facility}
+
+\begin{f90format}
+{nside, mask, distance}
+\end{f90format}
+
+\begin{arguments}
+{
+\begin{tabular}{p{0.35\hsize} p{0.05\hsize} p{0.1\hsize} p{0.40\hsize}} \hline  
+\textbf{name~\&~dimensionality} & \textbf{kind} & \textbf{in/out} & \textbf{description} \\ \hline
+                   &   &   &                           \\ %%% for presentation
+nside & I4B & IN & the $N_{side}$ value of the input mask. \\
+mask(0:Npix-1) & I4B & IN & Input NESTED-ordered mask. Npix = 12*nside*nside\\
+distance(0:Npix-1) & DP & OUT & Output NESTED-ordered angular-distance map
+\end{tabular}
+}
+\end{arguments}
+
+\begin{example}
+{
+use healpix\_types \\
+use healpix\_modules \\
+% use pix\_tools, only : nside2npix \\
+% use alm\_tools, only : dist2holes\_nest \\
+% integer(I4B) :: nside, lmax, mmax, npix, spin\\
+% real(SP), dimension(:,:), allocatable :: map \\
+% complex(SPC), dimension(:,:,:), allocatable :: alm \\
+% \ldots \\
+% nside=256 ; lmax=512 ; mmax=lmax ; spin=4\\
+% npix=nside2npix(nside)\\
+% allocate(alm(1:2,0:lmax,0:mmax))\\
+% allocate(map(0:npix-1,1:2))\\
+\ldots \\
+call dist2holes\_nest(nside, mask, distance)  \\
+}
+{???
+}
+\end{example}
+
+\begin{modules}
+  \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+  \item[\textbf{mask\_tools}] mask processing module (see related routines below)
+  \end{sulist}
+\end{modules}
+
+\begin{related}
+  \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+	\maskToolsRelated
+  \end{sulist}
+\end{related}
+
+\rule{\hsize}{2mm}
+
+\newpage

@@ -1,0 +1,103 @@
+% -*- LaTeX -*-
+
+% PLEASE USE THIS FILE AS A TEMPLATE FOR THE DOCUMENTATION OF YOUR OWN
+% FACILITIES: IN PARTICULAR, IT IS IMPORTANT TO NOTE COMMENTS MADE IN
+% THE TEXT AND TO FOLLOW THIS ORDERING. THE FORMAT FOLLOWS ONE USED BY
+% THE COBE-DMR PROJECT.	
+% A.J. Banday, April 1999.
+
+
+
+
+\renewcommand{\facname}{{reorder }}
+\renewcommand{\FACNAME}{{REORDER }}
+\sloppy
+
+
+
+\title{\healpix IDL Facility User Guidelines}
+\docid{\facname} \section[\facname]{ }
+\label{idl:reorder}
+\docrv{Version 1.1}
+\author{Eric Hivon}
+\abstract{This document describes the \healpix facility \facname.}
+
+
+
+
+\begin{facility}
+{This IDL facility allows the reordering of a full sky map from NESTED to RING
+scheme and vice-versa.}
+{src/idl/toolkit/reorder.pro}
+\end{facility}
+
+\begin{IDLformat}
+{\mylink{idl:reorder:result}{Result} = \FACNAME(%
+\mylink{idl:reorder:input_map}{Input\_map} [, 
+\mylink{idl:reorder:help}{/HELP}, 
+\mylink{idl:reorder:in}{In}=, 
+\mylink{idl:reorder:out}{Out}=, 
+\mylink{idl:reorder:n2r}{/N2R}, 
+\mylink{idl:reorder:r2n}{/R2N}])}
+\end{IDLformat}
+
+\begin{qualifiers}
+  \begin{qulist}{} %%%% NOTE the ``extra'' brace here %%%%
+	\item[{Result}] \mytarget{idl:reorder:result}
+	variable containing on output the reordered map
+
+ 	\item[{Input\_map}] \mytarget{idl:reorder:input_map}
+          variable containing the input map
+
+  \end{qulist}
+\end{qualifiers}
+
+\begin{keywords}
+  \begin{kwlist}{} %%% extra brace
+	\item[{/HELP}]	 \mytarget{idl:reorder:help}
+	if set, the documentation header is printed out and the code exits
+
+ 	\item[{In=}] \mytarget{idl:reorder:in}
+	specifies the input ordering, can be either 'RING' or 'NESTED'
+
+       \item[{Out=}]\mytarget{idl:reorder:out}
+	specifies the output ordering, can be either 'RING' or 'NESTED'
+
+ 	\item[{/N2R}] \mytarget{idl:reorder:n2r}
+	  If set, does the NESTED to RING conversion, equivalent to In='NESTED'
+	  and Out='RING' 
+
+ 	\item[{/R2N}] \mytarget{idl:reorder:r2n}
+	  If set, does the RING to NESTED conversion, equivalent to 
+In='RING' and Out='NESTED'
+   \end{kwlist}
+\end{keywords}
+
+\begin{codedescription}
+{\facname allows the reordering of a full sky map from NESTED to RING
+scheme and vice-versa}
+\end{codedescription}
+
+
+
+\begin{related}
+  \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+  \item[idl] version \idlversion or more is necessary to run \facname
+  \item[\htmlref{ud\_grade}{idl:ud_grade}]  downgrades or progrades a full-sky
+or cut-sky \healpix map.
+\end{sulist}
+\end{related}
+
+
+\begin{example}
+{
+\begin{tabular}{l} %%%% use this tabular format %%%%
+map\_nest = reorder(map\_ring, in='ring', out='nest') \\
+\end{tabular}
+}
+{The RING ordered map {\tt map\_ring} is converted to the 
+NESTED map {\tt map\_nest}.
+}
+\end{example}
+
+

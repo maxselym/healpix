@@ -1,0 +1,70 @@
+\sloppy
+\docid{fill\_holes\_nest}\section[fill\_holes\_nest]{ }
+\label{sub:fill_holes_nest}
+\docrv{Version 1.0}
+\author{Eric Hivon}
+\abstract{This document describes the \healpix Fortran90 subroutine FILL\_HOLES\_NEST.}
+
+\begin{facility}
+{For a input binary mask in NESTED ordering, \thedocid\ flip to 1 all pixels located
+in invalid regions with fewer pixels than the threshold provided.\\
+Two pixels are adjacent (and belong to the same region or hole) if they have at
+least one point in common.
+}
+{\modMaskTools}
+\end{facility}
+
+\begin{f90format}
+{nside, new\_min\_size, mask\_in, mask\_out}
+\end{f90format}
+
+\begin{arguments}
+{
+\begin{tabular}{p{0.35\hsize} p{0.05\hsize} p{0.1\hsize} p{0.40\hsize}} \hline  
+\textbf{name~\&~dimensionality} & \textbf{kind} & \textbf{in/out} & \textbf{description} \\ \hline
+                   &   &   &                           \\ %%% for presentation
+nside & I4B & IN & The $N_{side}$ value of the input mask. \\
+new\_min\_size & I4B & IN & Minimal size of hole (in pixels) on output\\
+mask\_in(0:Npix-1) & I4B & IN & Input NESTED-ordered mask. Npix = 12*nside*nside\\
+mask\_out(0:Npix-1) &I4B & OUT & Output NESTED-ordered mask. Can be the same
+array as mask\_in.
+\end{tabular}
+}
+\end{arguments}
+
+\begin{example}
+{
+use healpix\_types \\
+use healpix\_modules \\
+% use pix\_tools, only : nside2npix \\
+% use alm\_tools, only : fill\_holes\_nest \\
+% integer(I4B) :: nside, lmax, mmax, npix, spin\\
+% real(SP), dimension(:,:), allocatable :: map \\
+% complex(SPC), dimension(:,:,:), allocatable :: alm \\
+% \ldots \\
+% nside=256 ; lmax=512 ; mmax=lmax ; spin=4\\
+% npix=nside2npix(nside)\\
+% allocate(alm(1:2,0:lmax,0:mmax))\\
+% allocate(map(0:npix-1,1:2))\\
+\ldots \\
+call \thedocid(nside, new\_min\_size, mask\_in, mask\_in)  \\
+}
+{???
+}
+\end{example}
+
+\begin{modules}
+  \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+  \item[\textbf{mask\_tools}] mask processing module (see related routines below)
+  \end{sulist}
+\end{modules}
+
+\begin{related}
+  \begin{sulist}{} %%%% NOTE the ``extra'' brace here %%%%
+	\maskToolsRelated
+  \end{sulist}
+\end{related}
+
+\rule{\hsize}{2mm}
+
+\newpage

@@ -1,0 +1,264 @@
+#! /bin/sh
+#
+#=============================
+#  script to pack a release
+#
+#  cd /tmp
+#  svn co  [-r BRANCH] https://healpix.svn.sourceforge.net/svnroot/healpix/trunk Healpix_[VERSION]
+#
+# #  git clone https://github.com/healpy/healpy.git healpy ; cd healpy ; git checkout 1.4.1 ; git branch
+# #  \rm -rf hpbeta .git* ;  ln -s ../cxx hpbeta ;  cd .. 
+# #  cp -p healpy Healpix_[VERSION]/src
+#
+#  wget https://github.com/healpy/healpy/tarball/1.4.1 -O healpy.tar.gz
+#  tar -xvzpf healpy.tar.gz;  cd healpy-healpy-* ; \rm -r hpbeta .git* ; ln -s ../cxx hpbeta ; cd ..
+#  mv healpy-healpy-* Healpix_*/src/healpy
+#
+#  cd Healpix_[VERSION]
+#  ./pack
+#
+#=============================
+
+. hpxconfig_functions.sh
+
+updateVersion () {
+  # date string
+  reldate=`date +%Y-%m-%d`  # eg 2009-08-31
+  shortdate=`date +%Y%b%d`  # eg 2009Jul31
+
+  # temporary file
+  tmpfile="./tmpfile"
+
+  # versions number
+  current=`grep -v '#' ./Version`
+  version=${current}
+  echoLn "Enter version number ($current) "
+  read answer
+  [ "x$answer" != "x" ] && version="$answer"
+  echo $version $reldate
+
+  # update configure script
+  infile='./configure'
+  echo "editing ${infile}"
+  cat $infile |\
+      sed "s|^HPXVERSION=.*|HPXVERSION=${version}|g" >\
+      $tmpfile
+  mv $tmpfile $infile
+  chmod u+x ${infile}
+
+  # update INSTALL
+  infile='./INSTALL'
+  echo "editing ${infile}"
+  cat $infile |\
+      sed "s|_HPV_|$version|g" >\
+      $tmpfile
+  mv $tmpfile $infile
+
+  # update main directory Version file
+  infile='./Version'
+  echo "editing ${infile}"
+  cat $infile |\
+      sed "s|$current|$version|g" >\
+      $tmpfile
+  mv $tmpfile $infile
+
+  # update IDL init_healpix file
+  infile='./src/idl/misc/init_healpix.pro'
+  echo "editing ${infile}"
+  cat $infile |\
+      sed "s|version =.*$|version = '$version'|g" |\
+      sed "s|date =.*$|date = '$reldate'|g" >\
+      $tmpfile
+  mv $tmpfile $infile
+
+  # update doc/Tex/hpxversion.tex file
+  infile='./doc/Tex/hpxversion.tex'
+  echo "editing ${infile}"
+  cat $infile |\
+      sed "s|newcommand{\\\\hpxversion}.*$|newcommand{\\\\hpxversion}{$version}|g" >\
+      $tmpfile
+  mv $tmpfile $infile
+  cat $infile
+
+  # update F90 healpix_types file (2009-07-01)
+  infile='./src/f90/mod/healpix_types.F90'
+  echo "editing ${infile}"
+  cat $infile |\
+      sed "s|healpix_version =.*$|healpix_version = '$version'|g" >\
+      $tmpfile
+  mv $tmpfile $infile
+}
+
+#---------------
+updateCopyrightDate () {
+
+    dir=${here}
+    instring='Copyright (C) 1997-2010'
+    outstring='Copyright (C) 1997-2012'
+    #tmpfile='/tmp/tmp_updatecopyright.txt'
+
+    echo "In                $dir"
+    echo "Changing          $instring -> $outstring"
+
+    inlist=`find $dir -type f | grep -v \\.svn | grep -v java | grep -vi bk | xargs grep "$instring" | awk -F: '{print $1}'`
+
+    for file in $inlist ; do
+	ls -l $file
+	grep "$instring" $file
+	sed -i "s|$instring|$outstring|" ${file}
+	grep "$outstring" $file
+    done
+}
+#---------------
+
+
+revision=`svnversion .`
+echo "Revison=${revision}"
+setTopDefaults
+echo "This script will destroy several files and subdirectories"
+echoLn "Are you sure you want to proceed ? [NO/yes] "
+read answer
+if [ "$answer" != "yes" ]; then
+    echo "Exiting."
+    exit 0
+fi
+
+do_split=0
+# echo "Do you want to split the produced tar files (for HFI DPC)"
+# echoLn "[NO/yes]                       "
+# read answer
+# [ "$answer" == "yes" ] && do_split=1
+
+echo "removing CVS directories..."
+find . -type d -name CVS -exec \rm -rf {} \;
+
+echo "removing SVN directories..."
+find . -type d -name .svn -exec \rm -rf {} \;
+
+OS=`uname -s`
+updateVersion
+
+here=`\pwd`
+mkdir -p doc/html
+mkdir -p doc/pdf
+
+echo "installing java Documentation"
+cd src/java
+ant docs
+cp -pr healpixdocs ${here}/doc/html/java
+\rm -r dist reports build # re-instated 2010-02-22
+\rm -r META-INF
+ant clean
+cd $here
+#cp -pr src/java/healpixdocs doc/html/java
+#\rm -r src/java/healpixdocs/* # re-instated 2010-02-22
+
+echo "cleaning up C++..."
+cd src/cxx
+export HEALPIX_TARGET=generic_gcc
+make doc
+cd $here
+# rm -r src/cxx/doc
+mv src/cxx/doc/index.html src/cxx/doc/index_cxx.htm
+cp src/cxx/doc/index_cxx.htm src/cxx/doc/index_cxx.html
+mv src/cxx/doc/* doc/html
+rmdir src/cxx/doc
+cd src/cxx
+[ -r Makefile ] && make tidy
+\rm -rf ${HEALPIX_TARGET}
+\rm -rf build.${HEALPIX_TARGET}
+#\rm -rf config/config.healpy # remove config.healpy (2011-01-31)
+cd $here
+
+oldwebsite="public_html_healpix"
+newwebsite="healpix-dynamicPages"
+docautodir=${newwebsite}
+
+echo "remove old and new web sites"
+[ -d ${oldwebsite} ]  && \rm -rf ${oldwebsite}
+[ -d  ${newwebsite} ] && \rm -rf ${newwebsite}
+
+echo "removing change logs..."
+find . -name ChangeLog -exec \rm -f {} \;
+
+echo "generating documentations"
+# recreate directory receiving doc from doc/TeX/Makefile
+mkdir -p ${docautodir}/pdf
+mkdir -p ${docautodir}/html
+\rm -f ${docautodir}/pdf/*
+\rm -f ${docautodir}/html/*
+cd doc/TeX
+make pdf
+make html
+cd $here
+
+echo "dealing with Ximview doc"
+mkdir -p doc/html/ximview
+cp -p src/idl/ximview/docs/* doc/html/ximview/
+
+
+echo "removing doc/TeX and doc/*.txt..."
+\rm -rf doc/TeX
+\rm -f doc/*.txt
+mv ${docautodir}/html/* doc/html
+mv ${docautodir}/pdf/*  doc/pdf
+\rm -rf ${docautodir}/
+\rm -rf DONE.txt TODO Bugs.txt
+\rm -rf include bin lib
+
+echo "removing non-releasable programs..."
+for p in quad_ring; do
+    echo "  $p..."
+    \rm -rf src/f90/$p
+    sed 's/'$p' *//' Makefile.in > Makefile.save
+    mv Makefile.save Makefile.in
+done
+[ -d extra ] && \rm -rf extra
+
+# update copyright date in header
+cd ${here}
+updateCopyrightDate
+cd ${here}
+
+[ -d gpl_header ] && \rm -rf gpl_header
+
+echo "removing myself..."
+\rm -f $0
+\rm -f 'getit'
+
+echo "--------------------"
+echo $version $reldate
+echo "--------------------"
+
+relsuf="${version}_${shortdate}"
+package="Healpix_${relsuf}.tar.gz"
+rnfile="Healpix_${relsuf}.ReleaseNotes.txt"
+echo "creating package ../${package}"
+cd ..
+tar -cvzpf ${package} `basename ${here}`
+cd ${here}
+
+if [ $do_split == 1 ] ; then
+    echo "splitting tar file"
+    tar -cvzpf "../Hpx_java.tar.gz" src/java
+    \rm -rf src/java
+    tar -cvzpf "../Hpx_test.tar.gz" test
+    \rm -rf test
+    tar -cvzpf "../Hpx_doc.tar.gz"  doc
+    \rm -rf doc
+    tar -cvzpf "../Hpx_data.tar.gz" data
+    \rm -rf data
+    
+    cd ..
+    tar -cvzpf "Healpix_src_${relsuf}.tar.gz" `basename ${here}`
+    cd ${here}
+fi
+
+cd ..
+\rm -f ${rnfile}
+allsums ${package} > ${rnfile}
+echo "SVN revision: ${revision}" >> ${rnfile}
+cat $rnfile
+cd ${here}
+
+exit
