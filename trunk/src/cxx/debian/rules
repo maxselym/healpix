@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ 
+
+override_dh_auto_configure:
+	# no-op
+
+override_dh_auto_build:
+	# no-op
+
+override_dh_auto_install:
+	mkdir -p debian/tmp/usr/include
+	mkdir -p debian/tmp/usr/lib
+	mkdir -p debian/tmp/usr/bin
+	$(MAKE) \
+	CC="gcc $(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)" \
+	CXX="g++ $(shell dpkg-buildflags --get CXXFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)" \
+	CL="gcc $(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get LDFLAGS)" \
+	CXXL="g++ $(shell dpkg-buildflags --get CXXFLAGS) $(shell dpkg-buildflags --get LDFLAGS)" \
+	HEALPIX_TARGET=generic_gcc PREFIX=debian/tmp/usr \
+	EXTERNAL_CFITSIO=yes CFITSIO_EXT_LIB=-lcfitsio

@@ -1,0 +1,21 @@
+Source: libchealpix
+Priority: extra
+Maintainer: Leo Singer <leo.singer@ligo.org>
+Build-Depends: debhelper (>= 8.0.0), libcfitsio3-dev
+Standards-Version: 3.9.3
+Section: libs
+Homepage: http://healpix.jpl.nasa.gov/
+
+Package: libchealpix-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, libchealpix0 (= ${binary:Version})
+Description: shared library for C interface to HEALPix
+ Hierarchical Equal Area isoLatitude Pixelization of a sphere
+
+Package: libchealpix0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: static library and headers for C interface to HEALPix
+ Hierarchical Equal Area isoLatitude Pixelization of a sphere
