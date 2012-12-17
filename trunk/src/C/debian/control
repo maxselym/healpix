@@ -1,6 +1,6 @@
 Source: libchealpix
 Priority: extra
-Maintainer: Leo Singer <leo.singer@ligo.org>
+Maintainer: Andrea Zonca <andrea.zonca@gmail.com>
 Build-Depends: debhelper (>= 8.0.0), libcfitsio3-dev
 Standards-Version: 3.9.3
 Section: libs
