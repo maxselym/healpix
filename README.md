@@ -4,7 +4,7 @@ HEALPix Ubuntu packaging scripts
 PPA
 ---
 
-[https://launchpad.net/~andreazonca/+archive/healpix][https://launchpad.net/~andreazonca/+archive/healpix]
+<https://launchpad.net/~zonca/+archive/healpix>
 
 How to build
 ------------
@@ -23,6 +23,6 @@ To upload to the repository make sure the `.gnupg` folder contains the same PGP 
 
 package is built and signed, then:
 
-    dput ppa:andreazonca/healpix <source.changes>
+    dput ppa:zonca/healpix <source.changes>
 
 the package is uploaded to Launchpad and built there.
