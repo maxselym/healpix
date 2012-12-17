@@ -1,0 +1,21 @@
+Source: healpix-cxx
+Priority: extra
+Maintainer: Andrea Zonca <andrea.zonca@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), libcfitsio3-dev
+Standards-Version: 3.9.3
+Section: libs
+Homepage: http://healpix.jpl.nasa.gov/
+
+Package: healpix-cxx
+Section: science
+Architecture: any
+Depends: ${misc:Depends}
+Description: C++ command line tools for HEALPix
+ Hierarchical Equal Area isoLatitude Pixelization of a sphere
+
+Package: libhealpix-cxx-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}
+Description: C++ headers and static libraries for HEALPix
+ Hierarchical Equal Area isoLatitude Pixelization of a sphere

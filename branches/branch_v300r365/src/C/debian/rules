@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ 
+
+override_dh_auto_configure:
+	# no configure step
+
+override_dh_auto_build:
+	$(MAKE) -C subs FLAGS+="$(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get CPPFLAGS) $(shell dpkg-buildflags --get LDFLAGS)" PIC="-fPIC -Wl,-soname,libchealpix.so.0" static shared
+
+override_dh_auto_install:
+	mkdir -p debian/tmp/usr/include
+	mkdir -p debian/tmp/usr/lib
+	$(MAKE) -C subs INCDIR=../debian/tmp/usr/include LIBDIR=../debian/tmp/usr/lib install
+	cd debian/tmp/usr/lib; mv libchealpix.so libchealpix.so.0; ln -s libchealpix.so.0 libchealpix.so
