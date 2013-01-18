@@ -1,3 +1,9 @@
+libchealpix (3.00-1) UNRELEASED; urgency=low
+
+  * Fix a broken symbolic link from libchealpix.so to libchealpix.so.0.
+
+ -- Leo Singer <leo.singer@ligo.org>  Fri, 18 Jan 2013 00:56:25 -0800
+
 libchealpix (3.00) unstable; urgency=low
 
   * Initial Release.
