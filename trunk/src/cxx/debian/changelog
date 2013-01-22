@@ -1,3 +1,11 @@
+healpix-cxx (3.00-1) UNRELEASED; urgency=low
+
+  * The C++ HEALPix library does not build on GCC 4.4. If the program 'g++' is
+    present, but its version number is less than 4.5, then use 'g++-4.3'
+    instead.
+
+ -- Leo Singer <leo.singer@ligo.org>  Tue, 22 Jan 2013 08:59:59 -0800
+
 healpix-cxx (3.00) unstable; urgency=low
 
   * Initial Release.

@@ -1,7 +1,7 @@
 Source: healpix-cxx
 Priority: extra
 Maintainer: Leo Singer <leo.singer@ligo.org>
-Build-Depends: debhelper (>= 8.0.0), libcfitsio3-dev
+Build-Depends: gcc (>= 4:4.5) | gcc-4.3, g++ (>= 4:4.5) | g++-4.3, debhelper (>= 8.0.0), libcfitsio3-dev
 Standards-Version: 3.9.3
 Section: libs
 Homepage: http://healpix.jpl.nasa.gov/
