@@ -1,4 +1,10 @@
-healpix-cxx (3.00-1) UNRELEASED; urgency=low
+healpix-cxx (3.00-2) UNRELEASED; urgency=low
+
+  * Remove compiler flag -march=native because it generates non-portable code.
+
+ -- Leo Singer <leo.singer@ligo.org>  Wed, 30 Jan 2013 09:03:55 -0800
+
+healpix-cxx (3.00-1) unstable; urgency=low
 
   * The C++ HEALPix library does not build on GCC 4.4. If the program 'g++' is
     present, but its version number is less than 4.5, then use 'g++-4.3'

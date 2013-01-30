@@ -23,6 +23,7 @@ override_dh_auto_install:
 	mkdir -p debian/tmp/usr/lib
 	mkdir -p debian/tmp/usr/bin
 	$(MAKE) \
+	LS_OPTFLAGS="-O3 -ffast-math -fomit-frame-pointer -fno-tree-vectorize" \
 	CC="$(GCC) $(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)" \
 	CXX="$(GXX) $(shell dpkg-buildflags --get CXXFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)" \
 	CL="$(GCC) $(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get LDFLAGS)" \
